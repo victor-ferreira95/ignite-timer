@@ -7,7 +7,7 @@ import {
   Separator,
   StartCountdownButton,
   TaskInput,
-} from './styled'
+} from './styles'
 
 export function Home() {
   return (
