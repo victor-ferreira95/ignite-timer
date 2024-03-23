@@ -34,7 +34,6 @@ interface Cycle {
 
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
-
   const [activeCycleId, setActiveCycleId] = useState('')
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
 
@@ -46,29 +45,37 @@ export function Home() {
     },
   })
 
-  const activeCycle = cycles.find((cycle) => (cycle.id = activeCycleId))
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   useEffect(() => {
+    let interval: NodeJS.Timeout
     if (activeCycle) {
       // o tempo em segundos do setInterval e do setTimeout nao é tão preciso
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSecondsPassed(
           differenceInSeconds(new Date(), activeCycle.startDate),
         )
       }, 1000)
     }
+
+    return () => {
+      clearInterval(interval)
+    }
   }, [activeCycle])
 
   function handleCreateNewCycle(data: NewCycleFormData) {
+    const id = String(new Date().getTime())
+
     const newCycle: Cycle = {
-      id: String(new Date().getTime()),
+      id,
       task: data.task,
       minutesAmount: data.minutesAmount,
       startDate: new Date(),
     }
 
     setCycles((state) => [...state, newCycle])
-    setActiveCycleId(newCycle.id)
+    setActiveCycleId(id)
+    setAmountSecondsPassed(0)
 
     reset()
   }
@@ -81,6 +88,12 @@ export function Home() {
 
   const minutes = String(minutesAmount).padStart(2, '0')
   const seconds = String(secondsAmount).padStart(2, '0')
+
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minutes}:${seconds}`
+    }
+  }, [activeCycle, minutes, seconds])
 
   // assiste as mudanças do campo task
   const task = watch('task')
