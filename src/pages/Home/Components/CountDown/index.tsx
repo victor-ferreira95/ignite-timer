@@ -7,8 +7,8 @@ export function CountDown() {
   const {
     activeCycle,
     activeCycleId,
-    markCurrentCycleAsFinished,
     amountSecondsPassed,
+    markCurrentCycleAsFinished,
     setSecondsPassed,
   } = useContext(CyclesContext)
 
@@ -37,7 +37,13 @@ export function CountDown() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle, totalSeconds, activeCycleId, markCurrentCycleAsFinished])
+  }, [
+    activeCycle,
+    totalSeconds,
+    activeCycleId,
+    markCurrentCycleAsFinished,
+    setSecondsPassed,
+  ])
 
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
 

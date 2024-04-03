@@ -117,8 +117,8 @@ export function Home() {
           value={{
             activeCycle,
             activeCycleId,
-            markCurrentCycleAsFinished,
             amountSecondsPassed,
+            markCurrentCycleAsFinished,
             setSecondsPassed,
           }}
         >
